@@ -29,6 +29,10 @@ code {
   text-align: left;
 }
 
+.App{
+  user-select: none
+}
+
 button.Del {
   display: inline-block;
   width: 2.7em;
@@ -158,5 +162,18 @@ i {
 .down {
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
+}
+
+.Page{
+  margin: 1% 0 0 4%;
+  display: flex;
+  flex-direction: row;
+}
+
+.Pagination{
+  margin-left: 2px;
+  border: 1px solid #01010c;
+  padding: 0 7px;
+  cursor: pointer;
 }
 

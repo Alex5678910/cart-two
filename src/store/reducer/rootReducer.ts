@@ -1,5 +1,11 @@
-import {IncreaseCount, DecreaseCount, RemoveCartItem, AddCartItem} from "../action/action";
-
+import {
+    IncreaseCount,
+    DecreaseCount,
+    RemoveCartItem,
+    AddCartItem,
+    SortItem,
+    HandelClickPagination
+} from "../action/action";
 
 export interface SetCartItems {
     type: 'FETCH_MENU_SUCCESS';
@@ -15,23 +21,36 @@ export interface CartItem {
 
 export interface TypeState {
     reducer: CartItems,
-    _persist: {}
 }
 
-export type CartItems = Array<CartItem>;
+export type CartItems = Array<CartItem>
 
-export default function func(state: CartItems = [], action: SetCartItems | IncreaseCount | DecreaseCount | RemoveCartItem | AddCartItem): CartItems {
+
+// const logs = (state: CartItems = [], id: number) => {
+//     let j
+//     for (let i: CartItem of state) {
+//         j = state[i]
+//     }
+// }
+
+export default function func(state: CartItems = [], action: SetCartItems | IncreaseCount | DecreaseCount | RemoveCartItem | AddCartItem | SortItem | HandelClickPagination): CartItems {
     switch (action.type) {
         case 'FETCH_MENU_SUCCESS':
             return action.payload;
         case "PLUS_ITEM":
-            return  state.map(item => item.id === action.payload ? { ...item, quantity: item.quantity + 1 } : item)
+            return state.map(item => item.id === action.payload ? {...item, quantity: item.quantity + 1} : item)
         case "MINUS_ITEM":
-            return  state.map(item => item.id === action.payload ? { ...item, quantity: item.quantity - 1 } : item)
+            return state.map(item => item.id === action.payload ? {...item, quantity: item.quantity - 1} : item)
         case 'REMOVE_CART_ITEM':
-            return state.filter(({ id }) => id !== action.payload);
+            return state.filter(({id}) => id !== action.payload)
         case 'ADD_CART_ITEM':
-            return [...state, action.payload];
+            return [...state, action.payload]
+        case 'SORT_ITEM':
+            return [...state.reverse()]
+        case 'PUG_ITEM':
+            // return [state[action.payload * action.payload - action.payload + 1], state[action.payload * action.payload], state[action.payload * action.payload + 1]]
+            // return logs(state, action.payload)
+            return [state[action.payload -1 ]]
         default:
             return state;
     }

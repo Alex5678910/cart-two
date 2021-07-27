@@ -24,6 +24,16 @@ export const increaseCount = (id: number): IncreaseCount => ({
     payload: id
 });
 
+export interface HandelClickPagination {
+    type: 'PUG_ITEM';
+    payload: number;
+}
+
+export const handelClickPagination = (id: number): HandelClickPagination => ({
+    type: 'PUG_ITEM',
+    payload: id
+});
+
 export interface DecreaseCount {
     type: 'MINUS_ITEM';
     payload: number;
@@ -49,7 +59,16 @@ export interface AddCartItem {
     payload: CartItem;
 }
 
-export const addCartItem = (title: string, price: number, quantity: number, id: number): AddCartItem => ({
+export const addCartItem = (title: string, price: number, quantity: number): AddCartItem => ({
     type: 'ADD_CART_ITEM',
-    payload: {title, price, quantity, id}
+    payload: {title, price, quantity, id: new Date().getTime()}
 })
+
+export const sortItem = (): SortItem => ({
+    type: 'SORT_ITEM',
+});
+
+export interface SortItem {
+    type: 'SORT_ITEM';
+}
+

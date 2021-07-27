@@ -1,7 +1,5 @@
 [
 	{"title": "Пицца с ссыром","price": 12, "quantity": 1,"id": 1},
-	{"title": "Пицца с колбасой","price": 14, "quantity": 1,"id": 2},
-	{"title": "Пицца с криветками","price": 11,"quantity": 1,"id": 3},
-	{"title": "Пицца с помидором","price": 18,"quantity": 1,"id": 4},
-	{"title": "Пицца с лососем","price": 12,"quantity": 1,"id": 5}
+	{"title": "Пицца с колбасой","price": 14, "quantity": 1,"id": 2}
 ]
+

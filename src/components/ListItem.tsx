@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from "react-redux";
-import {fetchItems, increaseCount, decreaseCount, removeCartItem} from "../store/action/action";
+import {fetchItems, increaseCount, decreaseCount, removeCartItem, sortItem} from "../store/action/action";
 import {CartItem, TypeState} from "../store/reducer/rootReducer";
 
 declare var confirm: (question: string) => boolean
@@ -11,12 +11,20 @@ export interface PropsType {
     decreaseCount: (id: number) => void;
     remove: (id: number) => void;
     state: Array<CartItem>
+    sortItem: () => void;
 }
 
 class ListItem extends React.PureComponent<PropsType> {
+
+    state = {
+        flag: false,
+    }
+
     componentDidMount(): void {
+        console.log('componentDidMount ListItem')
         this.props.loadItems()
     }
+
     plusHandler = (elem: { id: number }) => {
         const {increaseCount} = this.props;
         increaseCount(elem.id);
@@ -37,33 +45,43 @@ class ListItem extends React.PureComponent<PropsType> {
         }
     };
 
+
+    cls = 'up'
+
+    arrowHandler = () => {
+        this.setState({flag: !this.state.flag})
+        this.state.flag ? this.cls = 'up' : this.cls = 'down'
+        const {sortItem} = this.props;
+        sortItem();
+    }
+
     render() {
+
         const {state} = this.props
-        console.log(state)
         return (
             <>
                 <table className={'Table'}>
                     <thead className={'Thead'}>
                     <tr>
-                        <th className={'Box-title'}>Меню</th>
+                        <th className={'Box-title'}><i className={this.cls} onClick={this.arrowHandler}/>Меню</th>
                         <th className={'Box-title'}>Количество</th>
                         <th className={'Box-title'}>Цена</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {state.length > 0 ?
-                        state.map((e: CartItem, index: number) => {
+                    {state && state.length > 0 ?
+                        state.map((el: { id: number, title: string, price: number, quantity: number }, index: number) => {
                             return (
                                 <tr key={index}>
-                                    <td className={'Title-td'}>{e.title}</td>
-                                    <td><span className={'Increase'} onClick={() => this.plusHandler(e)}>
-                            +</span><span>{e.quantity}</span>
+                                    <td className={'Title-td'}>{el.title}</td>
+                                    <td><span className={'Increase'} onClick={() => this.plusHandler(el)}>
+                            +</span><span>{el.quantity}</span>
                                         <span className={'Decrease'}
-                                              onClick={() => this.minusHandler(e)}>
+                                              onClick={() => this.minusHandler(el)}>
                             -</span></td>
-                                    <td>{e.price}</td>
+                                    <td>{el.price}</td>
                                     <td>
-                                        <button className={'Del'} onClick={() => this.removeHandler(e)}>Del</button>
+                                        <button className={'Del'} onClick={() => this.removeHandler(el)}>Del</button>
                                     </td>
                                 </tr>
                             )
@@ -84,4 +102,18 @@ const mapStateToProps = (state: TypeState) => {
     }
 }
 
-export default connect(mapStateToProps, {loadItems: fetchItems, increaseCount, decreaseCount, remove: removeCartItem})(ListItem)
+export default connect(mapStateToProps, {
+    loadItems: fetchItems,
+    increaseCount,
+    decreaseCount,
+    remove: removeCartItem,
+    sortItem
+})(ListItem)
+
+//{"title": "Пицца с тунцом","price": 12, "quantity": 1,"id": 3},
+//{"title": "Пицца с сёмгой","price": 11, "quantity": 1,"id": 4},
+//{"title": "Пицца с ливером","price": 13, "quantity": 1,"id": 5},
+//{"title": "Пицца с карбонадом","price": 14, "quantity": 1,"id": 6},
+//{"title": "Пицца с ананасом","price": 12, "quantity": 1,"id": 7},
+//{"title": "Пицца с треской","price": 10, "quantity": 1,"id": 8},
+//{"title": "Пицца с грибами","price": 10, "quantity": 1,"id": 9}
